@@ -39,7 +39,8 @@ cd backend
 cp .env.example .env
 # edite .env com as credenciais do seu app Reddit (reddit.com/prefs/apps, tipo "script")
 npm install
-npm run ingest   # coleta os subreddits definidos em src/scripts/ingest.ts e monta o índice
+npm run seed     # popula o corpus localmente (offline, sem depender da API do Reddit)
+# ou npm run ingest (se tiver credenciais do Reddit configuradas no .env)
 npm run dev      # sobe a API em http://localhost:3001
 ```
 

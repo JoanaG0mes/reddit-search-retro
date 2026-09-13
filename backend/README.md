@@ -22,6 +22,12 @@ npm install
 ## Popular o corpus
 
 ```bash
+npm run seed
+```
+Popula o SQLite (`data/retrova.db`) com documentos reais dos subreddits e reconstrói o índice invertido (não depende de credenciais do Reddit).
+
+Para coletar dados novos diretamente via API do Reddit:
+```bash
 npm run ingest
 ```
 
