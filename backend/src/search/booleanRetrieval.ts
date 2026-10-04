@@ -1,21 +1,11 @@
 import { getPostingsForTerm } from '../index/invertedIndex.js'
+import { getAllDocumentIds } from '../corpus/corpusManager.js'
 import type { ParsedQuery } from './queryParser.js'
 
 export interface BooleanRetrievalResult {
   docIds: Set<number>
-  matchedTermsByDoc: Map<number, Set<string>> // doc_id -> termos (da query) que casaram nesse doc
+  matchedTermsByDoc: Map<number, Set<string>>
 }
-
-/**
- * Executa uma query já parseada contra o índice invertido, aplicando
- * as operações de conjunto clássicas de Boolean Retrieval:
- *
- *   AND -> interseção   OR -> união   NOT -> diferença
- *
- * A avaliação é feita da esquerda para a direita, cláusula por cláusula,
- * que é a forma mais simples e didática de implementar Boolean Retrieval
- * sem uma árvore de precedência de operadores.
- */
 export function executeBooleanQuery(parsed: ParsedQuery): BooleanRetrievalResult {
   const matchedTermsByDoc = new Map<number, Set<string>>()
 
@@ -36,13 +26,7 @@ export function executeBooleanQuery(parsed: ParsedQuery): BooleanRetrievalResult
     const postings = getPostingsForTerm(clause.term)
 
     if (resultSet === null) {
-      // Primeira cláusula: não há conjunto anterior para combinar.
-      // Limitação conhecida: se a consulta começar com "NOT termo" (sem termo
-      // positivo antes), não há um "universo" de documentos para calcular a
-      // diferença — aqui tratamos como se fosse positivo. Isso é aceitável
-      // para o escopo do projeto; um índice completo manteria um conjunto
-      // universal (todos os doc_ids) para resolver esse caso corretamente.
-      resultSet = postings
+      resultSet = clause.operator === 'NOT' ? difference(getAllDocumentIds(), postings) : postings
       if (clause.operator !== 'NOT') registerMatches(postings, clause.rawTerm)
       continue
     }
@@ -63,8 +47,6 @@ export function executeBooleanQuery(parsed: ParsedQuery): BooleanRetrievalResult
   }
 
   const finalDocIds = resultSet ?? new Set<number>()
-
-  // remove termos "fantasma" de docs que acabaram excluídos por um NOT posterior
   for (const docId of matchedTermsByDoc.keys()) {
     if (!finalDocIds.has(docId)) matchedTermsByDoc.delete(docId)
   }

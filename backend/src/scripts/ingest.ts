@@ -3,16 +3,11 @@ import { fetchSubredditPosts } from '../reddit/redditClient.js'
 import { ingestPosts, corpusSize } from '../corpus/corpusManager.js'
 import { buildInvertedIndex, vocabularySize } from '../index/invertedIndex.js'
 
-/**
- * Popula o corpus inicial (seção 4: 100 a 500 publicações).
- * Uso: npm run ingest
- * Ajuste a lista de subreddits/limite conforme o escopo da apresentação.
- */
 const SUBREDDITS: { name: string; limit: number }[] = [
-  { name: 'learnpython', limit: 60 },
-  { name: 'learnprogramming', limit: 60 },
-  { name: 'datascience', limit: 60 },
-  { name: 'brdev', limit: 60 },
+  { name: 'learnpython', limit: 50 },
+  { name: 'learnprogramming', limit: 50 },
+  { name: 'datascience', limit: 50 },
+  { name: 'brdev', limit: 50 },
 ]
 
 async function main() {

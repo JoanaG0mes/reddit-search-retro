@@ -1,6 +1,6 @@
 import express from 'express'
 import cors from 'cors'
-import './db/schema.js' // garante que as tabelas existem antes de tudo
+import './db/schema.js'
 import { env } from './config/env.js'
 import { searchRouter } from './api/search.js'
 import { ingestionRouter } from './api/ingestion.js'

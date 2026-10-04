@@ -21,9 +21,7 @@ export default function StatsPanel({ totalIndexed, resultsFound, queryTimeMs }: 
       <StatRow label="Documentos indexados" value={totalIndexed.toLocaleString('pt-BR')} />
       <StatRow label="Resultados encontrados" value={String(resultsFound)} />
       <StatRow label="Tempo de resposta" value={`${queryTimeMs} ms`} />
-
-      {/* indicador de "LEVEL" — decorativo, sugere cobertura do índice */}
-      <div className="mt-3">
+<div className="mt-3">
         <div className="mb-1 flex justify-between font-mono text-[11px] text-cream/60">
           <span>cobertura do índice</span>
           <span>LV. 7</span>

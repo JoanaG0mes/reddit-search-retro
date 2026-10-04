@@ -7,14 +7,6 @@ mkdirSync(dirname(env.dbPath), { recursive: true })
 
 export const db = new Database(env.dbPath)
 db.pragma('journal_mode = WAL')
-
-/**
- * Schema relacional que representa o pipeline de RI:
- *
- * documents  -> o corpus (um post do Reddit = um documento)
- * terms      -> o vocabulário (termo normalizado + document frequency)
- * postings   -> o índice invertido propriamente dito (term -> lista de doc_id)
- */
 db.exec(`
   CREATE TABLE IF NOT EXISTS documents (
     id            INTEGER PRIMARY KEY AUTOINCREMENT,

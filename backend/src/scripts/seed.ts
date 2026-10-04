@@ -3,8 +3,7 @@ import { ingestPosts, corpusSize } from '../corpus/corpusManager.js'
 import { buildInvertedIndex, vocabularySize } from '../index/invertedIndex.js'
 import type { RedditPostRaw } from '../types.js'
 
-const SEED_POSTS: RedditPostRaw[] = [
-  // --- r/learnpython ---
+export const SEED_POSTS: RedditPostRaw[] = [
   {
     redditId: 'lp_001',
     title: 'How do I start learning Python in 2024 as a complete beginner?',
@@ -105,8 +104,6 @@ const SEED_POSTS: RedditPostRaw[] = [
     numComments: 12,
     permalink: 'https://reddit.com/r/learnpython/comments/lp_010',
   },
-
-  // --- r/learnprogramming ---
   {
     redditId: 'prog_001',
     title: 'How to think like a programmer: breaking down complex problems',
@@ -207,8 +204,6 @@ const SEED_POSTS: RedditPostRaw[] = [
     numComments: 23,
     permalink: 'https://reddit.com/r/learnprogramming/comments/prog_010',
   },
-
-  // --- r/datascience ---
   {
     redditId: 'ds_001',
     title: 'Pandas data manipulation best practices: Vectorization vs apply',
@@ -309,8 +304,6 @@ const SEED_POSTS: RedditPostRaw[] = [
     numComments: 42,
     permalink: 'https://reddit.com/r/datascience/comments/ds_010',
   },
-
-  // --- r/brdev ---
   {
     redditId: 'brdev_001',
     title: 'Como conseguir a primeira vaga como desenvolvedor Júnior em 2024?',
@@ -413,8 +406,7 @@ const SEED_POSTS: RedditPostRaw[] = [
   },
 ]
 
-// Gera variações realistas para expandir o corpus para mais de 100 documentos
-function generateExpandedCorpus(): RedditPostRaw[] {
+export function generateExpandedCorpus(): RedditPostRaw[] {
   const list: RedditPostRaw[] = [...SEED_POSTS]
   const variations = [
     { sub: 'learnpython', topic: 'Python', keywords: ['scripting', 'automation', 'data analysis', 'algorithms', 'web scraping', 'APIs'] },
@@ -448,7 +440,6 @@ function generateExpandedCorpus(): RedditPostRaw[] {
     }
   }
 
-  // Mais documentos complementares para cobrir termos específicos de busca booleana
   const extraQueries = [
     { title: 'Python and SQL integration with SQLAlchemy and SQLite', sub: 'learnpython', text: 'How to connect Python to SQLite database, execute SQL queries, handle transactions, and build relational schemas.' },
     { title: 'JavaScript and TypeScript: migration guide for frontend apps', sub: 'learnprogramming', text: 'Why adding TypeScript types to JavaScript improves code quality and reduces runtime bugs in React and Node.' },
@@ -496,7 +487,9 @@ async function runSeed() {
   console.log(`📑 Documentos processados: ${indexResult.documentsProcessed}`)
 }
 
-runSeed().catch((err) => {
-  console.error('Erro ao popular corpus:', err)
-  process.exit(1)
-})
+if (process.argv[1]?.includes('seed')) {
+  runSeed().catch((err) => {
+    console.error('Erro ao popular corpus:', err)
+    process.exit(1)
+  })
+}

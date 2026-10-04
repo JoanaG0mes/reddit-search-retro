@@ -7,7 +7,7 @@ export class ApiUnavailableError extends Error {}
 export async function searchApi(query: string): Promise<SearchApiResponse> {
   let response: Response
   try {
-    response = await fetch(`${API_BASE}/api/search?q=${encodeURIComponent(query)}`)
+    response = await fetch(`${API_BASE}/api/search?q=${encodeURIComponent(query)}`, { signal: AbortSignal.timeout(10000) })
   } catch {
     throw new ApiUnavailableError('Backend do RETRØVA não respondeu.')
   }
@@ -27,13 +27,13 @@ export interface StatsApiResponse {
 }
 
 export async function statsApi(): Promise<StatsApiResponse> {
-  const response = await fetch(`${API_BASE}/api/stats`)
+  const response = await fetch(`${API_BASE}/api/stats`, { signal: AbortSignal.timeout(10000) })
   if (!response.ok) throw new ApiUnavailableError('Não foi possível obter estatísticas do backend.')
   return response.json()
 }
 
 export async function documentApi(id: string): Promise<FullDocument> {
-  const response = await fetch(`${API_BASE}/api/document/${id}`)
+  const response = await fetch(`${API_BASE}/api/document/${encodeURIComponent(id)}`, { signal: AbortSignal.timeout(10000) })
   if (!response.ok) throw new ApiUnavailableError('Documento não disponível (backend offline ou fora do corpus).')
   return response.json()
 }

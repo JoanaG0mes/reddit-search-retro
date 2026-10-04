@@ -13,15 +13,6 @@ const insertPostingStmt = db.prepare(`
 `)
 
 const clearDocPostingsStmt = db.prepare(`DELETE FROM postings WHERE doc_id = ?`)
-
-/**
- * Processa um documento e grava suas entradas no índice invertido:
- * para cada termo único do documento, garante uma linha em `terms`
- * (vocabulário) e uma linha em `postings` (termo -> documento).
- *
- * Reprocessável: limpa os postings antigos do doc antes de reinserir,
- * então rodar de novo sobre o mesmo corpus não duplica nada.
- */
 function indexDocument(doc: StoredDocument): void {
   clearDocPostingsStmt.run(doc.id)
 
@@ -35,14 +26,11 @@ function indexDocument(doc: StoredDocument): void {
 
   markProcessed(doc.id)
 }
-
-/**
- * Reconstrói o índice invertido inteiro a partir do corpus atual.
- * Chamado depois de uma ingestão (seção 8: Índice Invertido).
- */
 export function buildInvertedIndex(): { documentsProcessed: number; vocabularySize: number } {
   const documents = getAllDocuments()
   const indexAll = db.transaction((docs: StoredDocument[]) => {
+    db.prepare('DELETE FROM postings').run()
+    db.prepare('DELETE FROM terms').run()
     for (const doc of docs) indexDocument(doc)
   })
   indexAll(documents)
@@ -50,8 +38,6 @@ export function buildInvertedIndex(): { documentsProcessed: number; vocabularySi
   const vocabularySize = (db.prepare('SELECT COUNT(*) as count FROM terms').get() as { count: number }).count
   return { documentsProcessed: documents.length, vocabularySize }
 }
-
-/** Retorna a postings list (IDs de documentos) de um termo já processado (stemizado). */
 export function getPostingsForTerm(term: string): Set<number> {
   const rows = db.prepare('SELECT doc_id as docId FROM postings WHERE term = ?').all(term) as {
     docId: number

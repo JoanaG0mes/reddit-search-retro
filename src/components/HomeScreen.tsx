@@ -8,9 +8,11 @@ interface HomeScreenProps {
   onQueryChange: (value: string) => void
   onSubmit: () => void
   corpusSize: number
+  isSearching: boolean
+  isDemoMode: boolean
 }
 
-export default function HomeScreen({ query, onQueryChange, onSubmit, corpusSize }: HomeScreenProps) {
+export default function HomeScreen({ query, onQueryChange, onSubmit, corpusSize, isSearching, isDemoMode }: HomeScreenProps) {
   return (
     <div className="flex min-h-[70vh] items-center justify-center px-4 py-16">
       <PixelFrame className="w-full max-w-2xl p-6 sm:p-10">
@@ -34,7 +36,7 @@ export default function HomeScreen({ query, onQueryChange, onSubmit, corpusSize 
           </div>
 
           <div className="mt-5">
-            <SearchButton onClick={onSubmit} disabled={query.trim().length === 0} />
+            <SearchButton onClick={onSubmit} disabled={isSearching || query.trim().length === 0} label={isSearching ? 'BUSCANDO...' : 'BUSCAR'} />
           </div>
 
           <p className="mt-6 font-mono text-xs leading-relaxed text-cream/60">
@@ -42,7 +44,7 @@ export default function HomeScreen({ query, onQueryChange, onSubmit, corpusSize 
           </p>
 
           <p className="mt-3 font-mono text-[11px] text-cream/40">
-            Corpus indexado: <span className="text-yellow">{corpusSize.toLocaleString('pt-BR')}</span> documentos
+            {isDemoMode ? 'Corpus de demonstração' : 'Corpus indexado'}: <span className="text-yellow">{corpusSize.toLocaleString('pt-BR')}</span> documentos
           </p>
         </div>
       </PixelFrame>

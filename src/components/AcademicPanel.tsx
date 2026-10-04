@@ -12,14 +12,6 @@ interface PanelData {
   vocabularySize: number
   topTerms: { term: string; documentFreq: number }[]
 }
-
-/**
- * Seção 13 do briefing — painel visual que expõe o pipeline de RI
- * (CORPUS -> VOCABULARY -> INDEX -> QUERY -> RESULTS) para a
- * apresentação da disciplina. Busca os números reais em /api/stats;
- * some silenciosamente se o backend estiver fora do ar (não é crítico
- * para o uso normal da busca).
- */
 export default function AcademicPanel({ lastQuery, lastParsedQuery, lastResultsFound }: AcademicPanelProps) {
   const [data, setData] = useState<PanelData | null>(null)
   const [unavailable, setUnavailable] = useState(false)

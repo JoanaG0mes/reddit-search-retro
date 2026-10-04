@@ -22,8 +22,7 @@ export default function ResultCard({ result, index, onViewDetails }: ResultCardP
 
   return (
     <article className="border-4 border-ink bg-cream text-ink shadow-pixel transition-transform hover:-translate-y-1">
-      {/* cabeçalho do card: numero do resultado + relevancia, como um HUD */}
-      <div className="flex items-center justify-between border-b-4 border-ink bg-ink px-3 py-1.5 text-cream">
+<div className="flex items-center justify-between border-b-4 border-ink bg-ink px-3 py-1.5 text-cream">
         <span className="font-pixel text-[10px] text-yellow">RESULTADO #{num}</span>
         <span className={`font-pixel text-[10px] ${relevanceColor(result.relevance)}`}>
           {result.relevance}%
@@ -58,9 +57,7 @@ export default function ResultCard({ result, index, onViewDetails }: ResultCardP
             ))}
           </div>
         )}
-
-        {/* barra de relevância estilo barra de vida/progresso */}
-        <div>
+<div>
           <div className="mb-1 flex justify-between font-mono text-[11px] text-ink/60">
             <span>relevância</span>
             <span>{result.relevance}/100</span>

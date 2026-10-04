@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import type { RedditResult, SortOption } from '../types'
 import SearchBar from './SearchBar'
 import SearchButton from './SearchButton'
@@ -8,6 +8,7 @@ import AcademicPanel from './AcademicPanel'
 
 interface ResultsScreenProps {
   query: string
+  submittedQuery: string
   onQueryChange: (value: string) => void
   onSubmit: () => void
   results: RedditResult[]
@@ -36,6 +37,7 @@ function sortResults(results: RedditResult[], sortBy: SortOption): RedditResult[
 
 export default function ResultsScreen({
   query,
+  submittedQuery,
   onQueryChange,
   onSubmit,
   results,
@@ -48,6 +50,7 @@ export default function ResultsScreen({
 }: ResultsScreenProps) {
   const [sortBy, setSortBy] = useState<SortOption>('relevance')
   const [activeSubreddit, setActiveSubreddit] = useState<string | null>(null)
+  useEffect(() => setActiveSubreddit(null), [results])
 
   const subreddits = useMemo(
     () => Array.from(new Set(results.map((r) => r.subreddit))),
@@ -63,12 +66,11 @@ export default function ResultsScreen({
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
-      {/* barra de busca compacta no topo dos resultados */}
-      <div className="mb-8 flex flex-col gap-3 sm:flex-row">
+<div className="mb-8 flex flex-col gap-3 sm:flex-row">
         <div className="flex-1">
           <SearchBar value={query} onChange={onQueryChange} onSubmit={onSubmit} />
         </div>
-        <SearchButton onClick={onSubmit} disabled={query.trim().length === 0} className="sm:w-auto" />
+        <SearchButton onClick={onSubmit} disabled={isSearching || query.trim().length === 0} label={isSearching ? 'BUSCANDO...' : 'BUSCAR'} className="sm:w-auto" />
       </div>
 
       <p className="mb-2 font-mono text-sm text-cream/70">
@@ -77,7 +79,7 @@ export default function ResultsScreen({
         ) : (
           <>
             Exibindo resultados para{' '}
-            <span className="font-bold text-yellow">"{query}"</span>
+            <span className="font-bold text-yellow">"{submittedQuery}"</span>
           </>
         )}
       </p>
@@ -91,7 +93,7 @@ export default function ResultsScreen({
 
       <div className="mb-6">
         <AcademicPanel
-          lastQuery={query}
+          lastQuery={submittedQuery}
           lastParsedQuery={parsedQuery}
           lastResultsFound={isSearching ? undefined : results.length}
         />
@@ -109,7 +111,7 @@ export default function ResultsScreen({
           queryTimeMs={queryTimeMs}
         />
 
-        <ResultsList results={filteredResults} query={query} onViewDetails={onViewDetails} />
+        <ResultsList results={filteredResults} query={submittedQuery} onViewDetails={onViewDetails} />
       </div>
     </div>
   )

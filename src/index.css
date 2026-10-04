@@ -16,8 +16,6 @@ body {
   color: #f7f3e9;
   -webkit-font-smoothing: none;
 }
-
-/* overlay sutil de scanlines de CRT, aplicado por cima de toda a tela */
 .crt-overlay {
   pointer-events: none;
   position: fixed;
@@ -33,8 +31,6 @@ body {
   mix-blend-mode: multiply;
   opacity: 0.35;
 }
-
-/* barra de rolagem com estética retrô */
 ::-webkit-scrollbar {
   width: 12px;
 }
@@ -50,8 +46,6 @@ body {
   outline: 3px solid #ffe66d;
   outline-offset: 2px;
 }
-
-/* respeita preferência de menos movimento */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

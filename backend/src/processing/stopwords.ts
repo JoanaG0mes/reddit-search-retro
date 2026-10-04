@@ -1,10 +1,4 @@
 import type { Lang } from '../types.js'
-
-/**
- * Etapa 3 do pré-processamento: remoção de stop words.
- * Listas compactas e explícitas (propositalmente visíveis no código,
- * já que o objetivo é demonstrar o conceito na disciplina).
- */
 const STOPWORDS_EN = new Set([
   'a', 'about', 'after', 'again', 'all', 'am', 'an', 'and', 'any', 'are',
   'as', 'at', 'be', 'because', 'been', 'before', 'being', 'below', 'between',

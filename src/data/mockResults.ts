@@ -1,8 +1,4 @@
 import type { RedditResult } from '../types'
-
-// Dados de FALLBACK, usados apenas quando o backend do RETRØVA está fora
-// do ar (modo demo). A busca real usa o índice invertido + busca booleana
-// implementados em backend/src/search — ver ApiUnavailableError em App.tsx.
 export const mockResults: RedditResult[] = [
   {
     id: '1',

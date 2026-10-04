@@ -6,9 +6,9 @@ export interface RedditResult {
   date: string
   comments: number
   score: number
-  relevance: number // 0 a 100 — score de exibição; hoje decorativo, futuramente TF-IDF/BM25
+  relevance: number
   url: string
-  matchedTerms: string[] // termos da query que casaram com este documento no índice invertido
+  matchedTerms: string[]
 }
 
 export interface SearchStats {
@@ -18,8 +18,6 @@ export interface SearchStats {
 }
 
 export type SortOption = 'relevance' | 'date' | 'score' | 'comments'
-
-// Documento completo (não truncado) — usado na tela de Document View.
 export interface FullDocument {
   id: string
   title: string
@@ -31,11 +29,9 @@ export interface FullDocument {
   url: string
   lang: 'en' | 'pt'
 }
-
-// Espelha o payload retornado pelo backend em /api/search — ver backend/src/api/search.ts
 export interface SearchApiResponse {
   query: string
-  parsedQuery: string // representação normalizada da consulta booleana interpretada
+  parsedQuery: string
   resultsFound: number
   queryTimeMs: number
   totalIndexed: number

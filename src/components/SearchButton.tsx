@@ -3,11 +3,6 @@ import type { ButtonHTMLAttributes } from 'react'
 interface SearchButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   label?: string
 }
-
-/**
- * Botão com aparência de botão de arcade: relevo, sombra deslocada
- * que "afunda" ao clicar, e cor de destaque vibrante.
- */
 export default function SearchButton({ label = 'BUSCAR', className = '', ...props }: SearchButtonProps) {
   return (
     <button

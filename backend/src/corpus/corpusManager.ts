@@ -6,15 +6,16 @@ const insertStmt = db.prepare(`
   INSERT INTO documents (reddit_id, title, selftext, subreddit, created_utc, score, num_comments, permalink, lang)
   VALUES (@redditId, @title, @selftext, @subreddit, @createdUtc, @score, @numComments, @permalink, @lang)
   ON CONFLICT(reddit_id) DO UPDATE SET
+    title = excluded.title,
+    selftext = excluded.selftext,
+    subreddit = excluded.subreddit,
+    created_utc = excluded.created_utc,
+    permalink = excluded.permalink,
+    lang = excluded.lang,
+    processed_at = NULL,
     score = excluded.score,
     num_comments = excluded.num_comments
 `)
-
-/**
- * Insere (ou atualiza métricas de) um lote de posts coletados do Reddit.
- * Cada post vira um "documento" do corpus, com id sequencial próprio
- * (seção 5: "Document 001", "Document 002", ...).
- */
 export function ingestPosts(posts: RedditPostRaw[]): number {
   const insertMany = db.transaction((items: RedditPostRaw[]) => {
     for (const post of items) {
@@ -54,4 +55,9 @@ export function markProcessed(docId: number): void {
 export function corpusSize(): number {
   const row = db.prepare('SELECT COUNT(*) as count FROM documents').get() as { count: number }
   return row.count
+}
+
+export function getAllDocumentIds(): Set<number> {
+  const rows = db.prepare('SELECT id FROM documents').all() as { id: number }[]
+  return new Set(rows.map((row) => row.id))
 }

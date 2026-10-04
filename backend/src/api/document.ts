@@ -2,8 +2,6 @@ import { Router } from 'express'
 import { getDocumentById } from '../corpus/corpusManager.js'
 
 export const documentRouter = Router()
-
-/** GET /api/document/:id — devolve o documento completo do corpus (não truncado). */
 documentRouter.get('/document/:id', (req, res) => {
   const id = Number(req.params.id)
   if (!Number.isInteger(id)) {

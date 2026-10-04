@@ -24,7 +24,7 @@ npm install
 ```bash
 npm run seed
 ```
-Popula o SQLite (`data/retrova.db`) com documentos reais dos subreddits e reconstrói o índice invertido (não depende de credenciais do Reddit).
+Popula o SQLite (`data/retrova.db`) com dados artificiais de demonstracao e reconstroi o indice invertido. Esse comando nao comprova coleta real do Reddit.
 
 Para coletar dados novos diretamente via API do Reddit:
 ```bash
@@ -60,7 +60,18 @@ npm run dev
 
 ## Limites da API do Reddit
 
-OAuth via `client_credentials`, 60 requisições/minuto por app registrado
-(janela deslizante de 10 min). Suficiente para coletar algumas centenas de
-posts sem problema; não paralelize ingestões de muitos subreddits ao mesmo
-tempo.
+O backend usa OAuth via `client_credentials` quando ha credenciais; sem elas, tenta RSS. O acesso e os limites dependem das permissoes concedidas pelo Reddit. Referencia: https://support.reddithelp.com/hc/en-us/articles/16160319875092-Reddit-Data-API-Wiki
+
+## Checkpoint 1: verificar coleta real
+
+Execute dentro de `backend`:
+
+```bash
+npm run check:reddit -- learnpython
+```
+
+O teste coleta ate tres posts reais e mostra seus IDs, titulos e links, sem alterar o banco e sem mostrar credenciais. Sem credenciais OAuth, tenta RSS; se a fonte bloquear o acesso ou nao retornar posts, termina com falha. Nunca substitui a coleta por dados do seed.
+
+Depois de validar o acesso, `npm run ingest` coleta os subreddits configurados, salva no SQLite e reconstroi o indice. A autenticacao do projeto Devvit `rec-inf` e separada das credenciais OAuth deste backend.
+
+RSS fornece o conteudo disponivel no feed e pode retornar menos documentos que o limite solicitado. Score e numero de comentarios nao sao fornecidos pelo feed; os valores nesses campos sao marcadores, nao metricas extraidas.

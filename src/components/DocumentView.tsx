@@ -4,7 +4,7 @@ import { documentApi, ApiUnavailableError } from '../lib/api'
 import PixelFrame from './PixelFrame'
 
 interface DocumentViewProps {
-  summary: RedditResult // usado como fallback imediato (e em modo demo, sem backend)
+  summary: RedditResult
   onBack: () => void
 }
 
@@ -15,6 +15,9 @@ export default function DocumentView({ summary, onBack }: DocumentViewProps) {
 
   useEffect(() => {
     let cancelled = false
+    setDoc(null)
+    setLoading(true)
+    setUsingFallback(false)
     documentApi(summary.id)
       .then((full) => {
         if (!cancelled) setDoc(full)

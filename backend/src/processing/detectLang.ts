@@ -1,7 +1,4 @@
 import type { Lang } from '../types.js'
-
-// Palavras funcionais frequentes que só existem em um dos dois idiomas.
-// Heurística simples e suficiente para separar EN de PT-BR num corpus do Reddit.
 const PT_MARKERS = [
   ' que ', ' não ', ' para ', ' com ', ' uma ', ' isso ', ' voc', ' então ',
   ' já ', ' está ', ' são ', ' também ',
